@@ -1,0 +1,45 @@
+package com.hotel.db;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+public class DatabaseService {
+
+    private static final String DB_URL = "jdbc:mysql://localhost:3306/hotel_db";
+    private static final String DB_USER = "root";
+    private static final String DB_PASS = "Rajat@6548";
+
+    public Connection getConnection() throws SQLException {
+        return DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
+    }
+
+    // No table creation here — MySQL tables are created manually
+    public static void initDatabase() {
+        System.out.println("MySQL database initialized (external).");
+    }
+
+    // Admin authentication
+    public static boolean authenticateAdmin(String username, String password) {
+        String query = "SELECT password FROM admin WHERE username = ?";
+
+        try (Connection con = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
+             PreparedStatement ps = con.prepareStatement(query)) {
+
+            ps.setString(1, username);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getString("password").equals(password);
+                }
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+}

@@ -1,0 +1,5 @@
+com\hotel\model\Customer.class
+com\hotel\model\Room.class
+com\hotel\service\BookingService.class
+com\hotel\db\DatabaseService.class
+com\hotel\app\HotelConsoleApp.class
